@@ -2,14 +2,18 @@ package org.example;
 
 public class Profesor extends Persona{
 
+    // Atributos de la clase
+
     private String especialidad;
     private int antiguedad;
     private String materiasImpartidas;
     private boolean disponibilidad;
 
+    // Constructor por defecto
     public Profesor() {
     }
 
+    // Constructor con todos los parámetros
     public Profesor(String dni,
                     String nombre,
                     int edad,
@@ -32,6 +36,7 @@ public class Profesor extends Persona{
 
     }
 
+    // Constructor con todos los parámetros menos disponibilidad
     public Profesor(String dni,
                     String nombre,
                     int edad,
@@ -53,6 +58,7 @@ public class Profesor extends Persona{
 
     }
 
+    // Constructor para un profesor nuevo sin antigüedad
     public Profesor(String dni,
                     String nombre,
                     int edad,
@@ -73,6 +79,7 @@ public class Profesor extends Persona{
 
     }
 
+    // Getter y setters
     public String getEspecialidad() {
         return especialidad;
     }
@@ -105,8 +112,7 @@ public class Profesor extends Persona{
         this.disponibilidad = disponibilidad;
     }
 
-
-
+    // toString
     @Override
     public String toString() {
         return super.toString() + ", especialidad = " + especialidad +

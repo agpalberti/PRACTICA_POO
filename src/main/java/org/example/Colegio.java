@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Colegio implements Beca {
+
+    // Atributos de la clase
     private String nombre;
     private String direccion;
     private int numMaxAlumnos;
@@ -20,7 +22,7 @@ public class Colegio implements Beca {
     public Colegio() {
     }
 
-    // Constructor con parámetros
+    // Constructor con todos los parámetros
     public Colegio(String nombre, String direccion, int numMaxAlumnos, int numMaxProfesores, Curso[] cursos) {
         this.nombre = nombre;
         this.direccion = direccion;
@@ -31,6 +33,7 @@ public class Colegio implements Beca {
         setCursos(cursos);
     }
 
+    // Constructor sin cursos
     public Colegio(String nombre, String direccion, int numMaxAlumnos, int numMaxProfesores) {
         this.nombre = nombre;
         this.direccion = direccion;
@@ -89,7 +92,7 @@ public class Colegio implements Beca {
         this.cursos = cursos;
 
         for (Curso curso : cursos) {
-            matricularCurso(curso);
+            if (curso!=null) matricularCurso(curso);
         }
     }
 
@@ -116,6 +119,7 @@ public class Colegio implements Beca {
 
     // Métodos públicos
 
+    // Busca un alumno según su DNI. Si no lo encuentra devuelve null
     public Alumno getAlumnoPorDNI(String dni) {
         if (!Arrays.stream(alumnos).toList().isEmpty()) {
             for (Alumno alumno : alumnos) {
@@ -128,6 +132,7 @@ public class Colegio implements Beca {
         return null;
     }
 
+    // Busca un profesor según su DNI. Si no lo encuentra devuelve null
     public Profesor getProfesorPorDNI(String dni) {
         if (!Arrays.stream(profesores).toList().isEmpty()) {
             for (Profesor profesor : profesores) {
@@ -139,6 +144,7 @@ public class Colegio implements Beca {
         return null;
     }
 
+    // Busca un curso según su denominación. Si no lo encuentra devuelve null
     public Curso getCursoPorCursoYGrupo(int cursoNumerico, char grupo) {
         if (!Arrays.stream(cursos).toList().isEmpty()) {
             for (Curso curso : cursos) {
@@ -151,6 +157,7 @@ public class Colegio implements Beca {
         return null;
     }
 
+    // Intenta matricular a un estudiante a un curso. Si no existe ningún curso, lo crea
     public boolean matricularEstudiante(Alumno alumno) {
         int primeraPosicionVacia = encontrarPrimeraPosicionVacia(Arrays.stream(alumnos).toList());
         boolean matriculado = false;
@@ -198,7 +205,7 @@ public class Colegio implements Beca {
                     curso.setTutor(profesor);
                     break;
                 }
-                ;
+
             }
 
             return true;
@@ -287,10 +294,34 @@ public class Colegio implements Beca {
         Curso curso = getCursoPorCursoYGrupo(cursoNumerico, grupo);
         if (curso != null) {
             int index = Arrays.stream(cursos).toList().indexOf(curso);
-            cursos[index].pasarDeCurso();
-            return true;
+            return cursos[index].pasarDeCurso();
         } else return false;
 
+    }
+
+    public boolean graduarCurso(int cursoNumerico, char grupo){
+        Curso curso = getCursoPorCursoYGrupo(cursoNumerico,grupo);
+        if (curso!=null){
+            int index = Arrays.stream(cursos).toList().indexOf(curso);
+            return cursos[index].graduar();
+        } else return false;
+    }
+
+    public boolean aniadirAsignaturaACurso(Asignatura asignatura, int cursoNumerico, char grupo){
+        Curso curso = getCursoPorCursoYGrupo(cursoNumerico,grupo);
+        if (curso!=null){
+            Asignatura[] nuevasAsignaturas = curso.getAsignaturas();
+            if(nuevasAsignaturas != null){
+                int indexNuevaAsignatura = encontrarPrimeraPosicionVacia(Arrays.stream(nuevasAsignaturas).toList());
+                if (indexNuevaAsignatura != -1){
+                    nuevasAsignaturas[indexNuevaAsignatura] = asignatura;
+                    int indexCurso = Arrays.stream(cursos).toList().indexOf(curso);
+                    cursos[indexCurso].setAsignaturas(nuevasAsignaturas);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // Métodos privados
@@ -300,15 +331,25 @@ public class Colegio implements Beca {
         int primeraPosicionVaciaAlumno = encontrarPrimeraPosicionVacia(Arrays.stream(alumnos).toList());
         int primeraPosicionVaciaProfesor = encontrarPrimeraPosicionVacia(Arrays.stream(profesores).toList());
         if (primeraPosicionVaciaProfesor != -1 && primeraPosicionVaciaAlumno != -1) {
+
+
             for (Alumno alumno : curso.getAlumnos()) {
-                if (alumno != null) {
+                if (alumno != null && primeraPosicionVaciaAlumno != -1) {
                     alumnos[primeraPosicionVaciaAlumno] = alumno;
                 }
+                primeraPosicionVaciaAlumno = encontrarPrimeraPosicionVacia(Arrays.stream(alumnos).toList());
             }
+
             profesores[primeraPosicionVaciaProfesor] = curso.getTutor();
+            primeraPosicionVaciaProfesor = encontrarPrimeraPosicionVacia(Arrays.stream(profesores).toList());
             for (Asignatura asignatura : curso.getAsignaturas()) {
-                int posicionVaciaProfesor = encontrarPrimeraPosicionVacia(Arrays.stream(profesores).toList());
-                profesores[posicionVaciaProfesor] = asignatura.getProfesor();
+               if (asignatura!= null && primeraPosicionVaciaProfesor != -1){
+                   if (asignatura.getProfesor() != null){
+                       profesores[primeraPosicionVaciaProfesor] = asignatura.getProfesor();
+                   }
+                   primeraPosicionVaciaProfesor = encontrarPrimeraPosicionVacia(Arrays.stream(profesores).toList());
+               }
+
             }
             return true;
         }

@@ -2,6 +2,8 @@ package org.example;
 
 public abstract class Persona {
 
+    // Atributos de la clase
+
     protected String dni;
     protected String nombre;
     protected int edad;
@@ -9,7 +11,7 @@ public abstract class Persona {
     protected String direccion;
 
 
-
+    // Getter y setters
     public String getDni() {
         return dni;
     }
@@ -54,6 +56,7 @@ public abstract class Persona {
         this.direccion = direccion;
     }
 
+    // toString
     @Override
     public String toString() {
         return " DNI = " + dni +

@@ -22,7 +22,9 @@ public class Main {
 
         Asignatura asignatura1 = new Asignatura("Matemáticas", profesor1, 8, "Matemáticas II");
         Asignatura asignatura2 = new Asignatura("Economía", profesor2, 6, "Economía de la Empresa");
-        Asignatura[] asignaturas = new Asignatura[]{asignatura1, asignatura2};
+        Asignatura[] asignaturas = new Asignatura[8];
+        asignaturas[0] = asignatura1;
+        asignaturas[1] = asignatura2;
 
 
         Curso curso1 = new Curso(profesor3, 2023, 1, 'B');
@@ -30,7 +32,10 @@ public class Main {
         curso1.setAsignaturas(asignaturas);
         curso1.setAlumnos(nuevosAlumnos);
 
-        Colegio colegio = new Colegio("IES Rafael Alberti", "Calle Balenciaga", 1000, 200, new Curso[]{curso1});
+        Curso[] cursos = new Curso[15];
+        cursos[0] = curso1;
+
+        Colegio colegio = new Colegio("IES Rafael Alberti", "Calle Balenciaga", 1000, 200, cursos);
 
         System.out.println("Bienvenido al sistema de gestión de IES Rafael Alberti\n");
 
@@ -214,8 +219,10 @@ public class Main {
                             1. Imprimir todos los cursos
                             2. Mostrar información de un curso
                             3. Crear curso
-                            4. 
-                            5. Volver
+                            4. Añadir asignatura a un curso
+                            5. Graduar curso
+                            6. Pasar año escolar a un curso
+                            7. Volver
                             
                             """);
 
@@ -238,7 +245,7 @@ public class Main {
 
                         case 2 -> {
                             try {
-                                System.out.println("Introduzca el curso numérico\n");
+                                System.out.println("Introduzca el número del curso\n");
                                 int cursoNumerico = Integer.parseInt(readln.nextLine());
                                 System.out.println("Introduzca el grupo");
                                 char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
@@ -247,11 +254,11 @@ public class Main {
                                     System.out.println(curso);
                                     System.out.println("Asignaturas:");
                                     for (Asignatura asignatura : curso.getAsignaturas()) {
-                                        System.out.println(asignatura);
+                                        if (asignatura!= null) System.out.println(asignatura);
                                     }
                                     System.out.println("Alumnos");
                                     for (Alumno alumno : curso.getAlumnos()) {
-                                        System.out.println(alumno);
+                                        if(alumno!= null) System.out.println(alumno);
                                     }
 
                                     System.out.println();
@@ -262,15 +269,74 @@ public class Main {
                         }
 
                         case 3 -> {
+                            System.out.println("Introduzca el número del curso\n");
+                            int cursoNumerico = Integer.parseInt(readln.nextLine());
+                            System.out.println("Introduzca el grupo");
+                            char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
+                            Curso curso = new Curso();
+                            curso.setCurso(cursoNumerico);
+                            curso.setGrupo(grupo);
+                            curso.setAnio(2023);
+                            boolean creado = colegio.crearCurso(curso);
 
+                            if (creado){
+                                System.out.println("Curso creado correctamente");
+
+                            }else System.out.println("No se ha podido crear el curso");
                         }
 
                         case 4 -> {
-                            salir = true;
+                                System.out.println("Introduzca el curso numérico\n");
+                                int cursoNumerico = Integer.parseInt(readln.nextLine());
+                                System.out.println("Introduzca el grupo");
+                                char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
+                                try {
+                                    Asignatura asignatura = crearAsignatura();
+                                    boolean aniadido = colegio.aniadirAsignaturaACurso(asignatura,cursoNumerico,grupo);
+                                    if (aniadido){
+                                        System.out.println("Se añadió la asignatura correctamente al curso especificado");
+                                    } else System.out.println("No se pudo añadir la asignatura a ese curso");
+                                } catch (Exception e){
+                                    System.out.println("Entrada incorrecta. Se volverá al menú inicial\n");
+                                }
+
+                        }
+
+                        case 5 -> {
+                            System.out.println("Introduzca el curso numérico\n");
+                            int cursoNumerico = Integer.parseInt(readln.nextLine());
+                            System.out.println("Introduzca el grupo");
+                            char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
+                            boolean graduado = colegio.graduarCurso(cursoNumerico,grupo);
+
+                            if (graduado){
+                                System.out.println("Curso graduado correctamente");
+                            } else System.out.println("No se ha podido graduar al curso");
+
+                        }
+
+                        case 6 -> {
+                            System.out.println("Introduzca el curso numérico\n");
+                            int cursoNumerico = Integer.parseInt(readln.nextLine());
+                            System.out.println("Introduzca el grupo");
+                            char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
+                            boolean pasadoDeCurso = colegio.pasarDeCurso(cursoNumerico,grupo);
+
+                            if (pasadoDeCurso){
+                                System.out.println("El curso ha pasado de curso");
+                            } else System.out.println("No se ha podido pasar de curso");
+                        }
+
+                        case 7 -> {
+                            System.out.println("Se volverá al menú inicial\n");
                         }
 
                         }
                     }
+
+                case 4 -> {
+                    salir = true;
+                }
 
                 }
 
@@ -278,6 +344,7 @@ public class Main {
 
             }
 
+        readln.close();
         System.out.println("El programa terminará");
 
     }
@@ -296,8 +363,6 @@ public class Main {
         String direccion = readln.nextLine();
         System.out.println("Introduzca la especialidad");
         String especialidad = readln.nextLine();
-        System.out.println("Introduzca las materias impartidas");
-        String materias = readln.nextLine();
         readln.close();
 
         return new Profesor(dni, nombre, edad, sexo, direccion, especialidad, nombre);
@@ -320,5 +385,21 @@ public class Main {
         return new Alumno(dni, nombre, edad, sexo, direccion);
     }
 
+    private static Asignatura crearAsignatura(){
+        Scanner readln = new Scanner(System.in);
+        System.out.println("Introduzca el nombre de la asignatura");
+        String nombre = readln.nextLine();
+
+        Asignatura asignatura = new Asignatura(nombre);
+
+        System.out.println("¿Quieres añadir un nuevo profesor a esta asignatura? (Y/N)");
+        char input = readln.nextLine().toUpperCase().charAt(0);
+
+        if (input == 'Y'){
+            asignatura.setProfesor(crearProfesor());
+        }
+        return asignatura;
+
+    }
 
 }

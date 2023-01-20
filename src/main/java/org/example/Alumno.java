@@ -2,6 +2,7 @@ package org.example;
 
 public class Alumno extends Persona{
 
+    // Atributos de la clase
     private boolean repetidor;
     private int notaMedia;
     private boolean matriculado;
@@ -10,8 +11,10 @@ public class Alumno extends Persona{
     private char grupo;
 
 
+    // Constructor por defecto
     public Alumno(){}
 
+    // Constructor con todos los parámetros
     public Alumno(String dni,
                     String nombre,
                     int edad,
@@ -33,6 +36,7 @@ public class Alumno extends Persona{
         super.direccion = direccion;
     }
 
+    // Constructor más simple con información básica
     public Alumno(String dni,
                   String nombre,
                   int edad,
@@ -50,6 +54,7 @@ public class Alumno extends Persona{
         super.direccion = direccion;
     }
 
+    // Getter y setters
     public boolean getRepetidor() {
         return repetidor;
     }
@@ -97,6 +102,8 @@ public class Alumno extends Persona{
     public void setCurso(int curso) {
         this.curso = curso;
     }
+
+    // Método toString
 
     @Override
     public String toString() {

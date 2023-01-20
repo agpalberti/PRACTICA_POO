@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 public class Curso implements Cursable {
 
+    // Atributos de la clase
+
     private Asignatura[] asignaturas = new Asignatura[8];
     private Alumno[] alumnos = new Alumno[20];
     private Profesor tutor;
@@ -12,8 +14,10 @@ public class Curso implements Cursable {
     private char grupo;
     private boolean graduado = false;
 
+    // Constructor por defecto
     public Curso(){}
 
+    // Constructor con todos los parámetros menos graduado
     public Curso(Profesor tutor,int anio, int curso, char grupo){
         this.tutor = tutor;
         this.anio = anio;
@@ -21,6 +25,7 @@ public class Curso implements Cursable {
         this.grupo = grupo;
     }
 
+    // Constructor más simple con el tutor y grupo
     public Curso(Profesor tutor, char grupo){
         this.tutor = tutor;
         this.anio = 2023;
@@ -28,6 +33,7 @@ public class Curso implements Cursable {
         this.grupo = grupo;
     }
 
+    // Getter y setters
     public void setCurso(int curso) {
         this.curso = curso;
     }
@@ -76,16 +82,24 @@ public class Curso implements Cursable {
         return asignaturas;
     }
 
+    // toString
     @Override
     public String toString() {
-        return "Tutor = " + tutor.nombre +
-                ", anio = " + anio +
-                ", grupo = " + curso + grupo;
+        if (tutor !=null) {
+           return "Tutor = " + tutor.nombre +
+                    ", anio = " + anio +
+                    ", grupo = " + curso + grupo+
+                   ", graduado = " + graduado;
+        }
+
+        else return "Grupo = " + curso + grupo + ", anio = " + anio + ", graduado = " + graduado;
+
     }
 
+    // Implementación de la interfaz
     @Override
     public boolean pasarDeCurso() {
-        if (!graduado){
+        if (!graduado && curso < 6){
             curso++;
             anio++;
             return true;

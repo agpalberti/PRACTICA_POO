@@ -2,14 +2,16 @@ package org.example;
 
 public class Asignatura {
 
-    String nombre;
-    Profesor profesor;
-    int horasSemanales;
-    String descripcion;
+    // Atributos de la clase
+    private String nombre;
+    private Profesor profesor;
+    private int horasSemanales;
+    private String descripcion;
 
-
+    // Constructor por defecto
     public Asignatura() {}
 
+    // Constructor con todos los parámetros
     public Asignatura(String nombre, Profesor profesor, int horasSemanales, String descripcion){
         this.nombre = nombre;
         this.profesor = profesor;
@@ -17,12 +19,12 @@ public class Asignatura {
         this.descripcion = descripcion;
     }
 
-    public Asignatura(String nombre, Profesor profesor){
+    // Constructor más simple con el nombre de la asignatura
+    public Asignatura(String nombre){
         this.nombre = nombre;
-        this.profesor = profesor;
     }
 
-
+    // Getter y setters
     public String getNombre() {
         return nombre;
     }
@@ -55,6 +57,8 @@ public class Asignatura {
         this.descripcion = descripcion;
     }
 
+
+    // Método toString
     @Override
     public String toString() {
         return "Nombre = " + nombre +
