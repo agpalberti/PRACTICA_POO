@@ -9,6 +9,9 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) {
 
+
+        // Rellenamos datos por defecto
+
         Alumno alumno1 = new Alumno("21332433N", "Alejandro González Parra", 22, 'H', "Calle Navarra N2", false, 5, true, false);
         Alumno alumno2 = new Alumno("31324567A", "Ricardo Gallego Domínguez", 20, 'H', "Calle Jamón N5", false, 9, true, false);
         Alumno[] nuevosAlumnos = new Alumno[20];
@@ -35,6 +38,8 @@ public class Main {
         Curso[] cursos = new Curso[15];
         cursos[0] = curso1;
 
+        // Y creamos un objeto Colegio con esos datos
+
         Colegio colegio = new Colegio("IES Rafael Alberti", "Calle Balenciaga", 1000, 200, cursos);
 
         System.out.println("Bienvenido al sistema de gestión de IES Rafael Alberti\n");
@@ -42,6 +47,7 @@ public class Main {
         boolean salir = false;
         Scanner readln = new Scanner(System.in);
 
+        // Imprimmos el menú
         while (!salir) {
             System.out.println("""
                     Elija una opción:
@@ -55,17 +61,20 @@ public class Main {
             int input;
 
             try {
+                // Si la entrada es incorrecta, se pondrá un -1
                 input = Integer.parseInt(readln.nextLine());
             } catch (Exception e) {
                 input = -1;
             }
 
-
+            // Gestionamos las opciones con un switch
             switch (input) {
+                // Si está fuera del 1 al 6
                 default -> {
                     System.out.println("Entrada incorrecta, prueba de nuevo");
                 }
 
+                // Imprime el menú de gestión de alumnos
                 case 1 -> {
                     System.out.println("""
                             Elija otra opción:
@@ -87,12 +96,14 @@ public class Main {
                     switch (input) {
                         default -> System.out.println("Entrada incorrecta. Se volverá al menú inicial\n");
                         case 1 -> {
+                            // Imprime todos los alumnos de la lista de alumnos
                             Stream<Alumno> alumnos = Arrays.stream(colegio.getAlumnos()).filter(Objects::nonNull);
                             alumnos.forEach(it -> System.out.println(it + "\n"));
 
                         }
 
                         case 2 -> {
+                            // Busca un alumno por su DNI y lo imprime
                             System.out.println("Introduzca el DNI del alumno\n");
                             String dni = readln.nextLine();
                             Alumno alumno = colegio.getAlumnoPorDNI(dni);
@@ -104,7 +115,7 @@ public class Main {
 
                         case 3 -> {
                             try {
-
+                                // Crea un alumno y lo intenta matricular
                                 Alumno alumno = crearAlumno();
                                 boolean matriculado = colegio.matricularEstudiante(alumno);
 
@@ -120,6 +131,7 @@ public class Main {
                             }
                         }
                         case 4 -> {
+                            // Busca un alumno e intenta dar una beca al alumno
                             System.out.println("Introduzca el DNI del alumno\n");
                             String dni = readln.nextLine();
                             boolean becado = colegio.darBeca(dni);
@@ -129,6 +141,7 @@ public class Main {
                                 System.out.println("No se ha podido conceder la beca al alumno con DNI " + dni + "\n");
                         }
                         case 5 -> {
+                            // Busca a un alumno y lo expulsa
                             System.out.println("Introduzca el DNI del alumno\n");
                             String dni = readln.nextLine();
                             boolean expulsado = colegio.expulsarEstudiante(dni);
@@ -137,6 +150,7 @@ public class Main {
                             } else System.out.println("No se ha podido expulsar al alumno con DNI" + dni + "\n");
                         }
                         case 6 -> {
+                            // Para volver al menú principal
                             System.out.println("Se volverá al menú inicial");
                         }
                     }
@@ -145,6 +159,7 @@ public class Main {
                 }
 
                 case 2 -> {
+                    // Imprime el menú de gestión de profesores
                     System.out.println("""
                             Elija otra opción:
                             1. Imprimir todos los profesores
@@ -166,12 +181,14 @@ public class Main {
                             System.out.println("Entrada incorrecta. Se volverá al menú inicial\n");
                         }
                         case 1 -> {
+                            // Imprime todos los profesores
                             for (Profesor profesor : colegio.getProfesores()) {
                                 if (profesor != null) System.out.println(profesor + "\n");
                             }
                         }
 
                         case 2 -> {
+                            // Busca un profesor por su DNI y lo imprime
                             System.out.println("Introduzca el DNI del profesor\n");
                             String dni = readln.nextLine();
                             Profesor profesor = colegio.getProfesorPorDNI(dni);
@@ -182,6 +199,7 @@ public class Main {
 
                         case 3 -> {
 
+                            // Crea un profesor y lo contrata
                             try {
                                 Profesor profesor = crearProfesor();
                                 boolean profesorContratado = colegio.contratarProfesor(profesor);
@@ -198,6 +216,7 @@ public class Main {
                         }
 
                         case 4 -> {
+                            // Busca a un profesor y lo despide
                             System.out.println("Introduzca el DNI del docente\n");
                             String dni = readln.nextLine();
                             boolean despedido = colegio.despedirProfesor(dni);
@@ -214,6 +233,7 @@ public class Main {
                 }
 
                 case 3 -> {
+                    // Menú para gestionar los cursos
                     System.out.println("""
                             Elija otra opción:
                             1. Imprimir todos los cursos
@@ -238,24 +258,30 @@ public class Main {
                         }
 
                         case 1 -> {
+                            // Imprime la información genérica de todos los cursos
                             for (Curso curso : colegio.getCursos()) {
                                 if (curso!= null) System.out.println(curso + "\n");
                             }
                         }
 
                         case 2 -> {
+                            // Imprime información de un curso en específico e su información más detallada
                             try {
                                 System.out.println("Introduzca el número del curso\n");
                                 int cursoNumerico = Integer.parseInt(readln.nextLine());
                                 System.out.println("Introduzca el grupo");
                                 char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
                                 Curso curso = colegio.getCursoPorCursoYGrupo(cursoNumerico, grupo);
+
                                 if (curso != null) {
+                                    // Imprime las asignaturas
                                     System.out.println(curso);
                                     System.out.println("Asignaturas:");
                                     for (Asignatura asignatura : curso.getAsignaturas()) {
                                         if (asignatura!= null) System.out.println(asignatura);
                                     }
+
+                                    // Imprime los alumnos
                                     System.out.println("Alumnos");
                                     for (Alumno alumno : curso.getAlumnos()) {
                                         if(alumno!= null) System.out.println(alumno);
@@ -269,6 +295,7 @@ public class Main {
                         }
 
                         case 3 -> {
+                            // Crea un curso y lo matricula
                             System.out.println("Introduzca el número del curso\n");
                             int cursoNumerico = Integer.parseInt(readln.nextLine());
                             System.out.println("Introduzca el grupo");
@@ -277,7 +304,7 @@ public class Main {
                             curso.setCurso(cursoNumerico);
                             curso.setGrupo(grupo);
                             curso.setAnio(2023);
-                            boolean creado = colegio.crearCurso(curso);
+                            boolean creado = colegio.crearYMatricularCurso(curso);
 
                             if (creado){
                                 System.out.println("Curso creado correctamente");
@@ -286,13 +313,18 @@ public class Main {
                         }
 
                         case 4 -> {
+                            // Busca un curso, crea una asignatura y se la añade al curso
                                 System.out.println("Introduzca el curso numérico\n");
                                 int cursoNumerico = Integer.parseInt(readln.nextLine());
                                 System.out.println("Introduzca el grupo");
                                 char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
+
                                 try {
+                                    // Creamos la asignatura
                                     Asignatura asignatura = crearAsignatura();
+                                    // La añadimos al curso
                                     boolean aniadido = colegio.aniadirAsignaturaACurso(asignatura,cursoNumerico,grupo);
+
                                     if (aniadido){
                                         System.out.println("Se añadió la asignatura correctamente al curso especificado");
                                     } else System.out.println("No se pudo añadir la asignatura a ese curso");
@@ -303,10 +335,12 @@ public class Main {
                         }
 
                         case 5 -> {
+                            // Busca un curso y lo gradúa
                             System.out.println("Introduzca el curso numérico\n");
                             int cursoNumerico = Integer.parseInt(readln.nextLine());
                             System.out.println("Introduzca el grupo");
                             char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
+
                             boolean graduado = colegio.graduarCurso(cursoNumerico,grupo);
 
                             if (graduado){
@@ -316,10 +350,13 @@ public class Main {
                         }
 
                         case 6 -> {
+
+                            // Busca un curso y les aumenta el curso
                             System.out.println("Introduzca el curso numérico\n");
                             int cursoNumerico = Integer.parseInt(readln.nextLine());
                             System.out.println("Introduzca el grupo");
                             char grupo = readln.nextLine().toUpperCase(Locale.ROOT).charAt(0);
+
                             boolean pasadoDeCurso = colegio.pasarDeCurso(cursoNumerico,grupo);
 
                             if (pasadoDeCurso){
@@ -335,6 +372,7 @@ public class Main {
                     }
 
                 case 4 -> {
+                    // Sale del programa
                     salir = true;
                 }
 
@@ -349,6 +387,7 @@ public class Main {
 
     }
 
+    // Pide todos los datos para la creación de un profesor y lo devuelve. Si las entradas son incorrectas, puede lanzar excepciones. Se gestiona en el método main
     private static Profesor crearProfesor(){
         Scanner readln = new Scanner(System.in);
         System.out.println("Introduzca el DNI del docente\n");
@@ -368,6 +407,7 @@ public class Main {
         return new Profesor(dni, nombre, edad, sexo, direccion, especialidad, nombre);
     }
 
+    // Pide todos los datos para la creación de un alumno y lo devuelve. Si las entradas son incorrectas, puede lanzar excepciones. Se gestiona en el método main
     private static Alumno crearAlumno(){
         Scanner readln = new Scanner(System.in);
         System.out.println("Introduzca el DNI del alumno\n");
@@ -385,10 +425,13 @@ public class Main {
         return new Alumno(dni, nombre, edad, sexo, direccion);
     }
 
+    // Pide todos los datos para la creación de una y asignatura. Además, pregunta si se desea crear un profesor para impartir esa asignatura. En caso afirmativo, llama a crearProfesor()
+    // Si las entradas son incorrectas, puede lanzar excepciones. Se gestiona en el método main
     private static Asignatura crearAsignatura(){
         Scanner readln = new Scanner(System.in);
         System.out.println("Introduzca el nombre de la asignatura");
         String nombre = readln.nextLine();
+        readln.close();
 
         Asignatura asignatura = new Asignatura(nombre);
 
